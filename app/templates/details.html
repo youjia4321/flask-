@@ -1,0 +1,54 @@
+{% extends 'blogbase.html' %}
+
+{% block content %}
+{% if current_user.is_authenticated %}
+    {% if blog %}
+        <h2>博客内容</h2>
+        <pre>{{ blog.content }}</pre>
+        <div class="comment">
+            <div class="comment-diaplay" style="padding-top: 20px;">
+            <h4 style="color:rgb(0, 0, 0)">热门评论</h4>
+                {% if comments %}
+                    {% for com in comments %}
+                        <p style="color:darkslategray">{{ com  }}&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;{{ comments[com] }}</p>
+                    {% endfor %}
+                {% else %}
+                    <p style="color:darkslategray">暂无评论...</p>
+                {% endif %}
+            </div>
+            <button id="comment" style="height: 25px; background: ivory"><img src="../static/images/chatbubble-working.png" width="20px"></button>
+            <div class="comment-post" style="padding-top: 20px ; display: none">
+            <h4>发布评论</h4>
+            <form action="details{{ blog.id }}" method="post">  
+                <div class="input-field" style="padding-top: 10px;"> 
+                    <label>您的评论</label><br><textarea type="text" name="comment" cols="80" rows="5"></textarea><br>
+                </div>
+                <input type="submit" style="margin-top:10px " value="提交">
+                <input type="reset" value="重置">
+            </form>
+            </div>
+        </div><br>
+    <a href="#" onclick="javascript:history.back(-1);">返回</a>
+
+    <script type="text/javascript">
+        $("#comment").click(function(){
+            $(".comment-post").show(1000);
+        });
+    </script>
+    {% else %}
+        <h2>还没有内容</h2>
+    {% endif %}
+{% else %}
+    <form method="POST" action="/">
+        <h4><label>Login</label></h4><input type="text" name="username" required><br>
+        
+        <h4><label>Password</label></h4><input type="password" name="password" required></textarea><br><br>
+        {% if error %}
+            <p style="color: red">{{ error }}</p>
+        {% endif %}
+        
+        <input type="submit" value="login">
+    </form><br>
+    <p>Don't have an account? <a href="register">Click here to register.</a></p>
+{% endif %}
+{% endblock %}
